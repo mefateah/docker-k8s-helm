@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dnatrack-analysis
+  labels:
+    app: analysis
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: analysis-app
+  template:
+    metadata:
+      labels:
+        app: analysis-app
+        tier: backend
+        tag: "v1"
+    spec:
+      containers:
+        - name: analysis-app
+          imagePullPolicy: Always
+          image: "arukim/dnatrack-service-analysis:v1"
+          volumeMounts:
+          - name: app-config
+            mountPath: /etc/config
+      volumes:
+        - name: app-config
+          configMap:
+            name: app
